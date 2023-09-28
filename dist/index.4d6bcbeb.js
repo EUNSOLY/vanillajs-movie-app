@@ -587,15 +587,21 @@ root.append(new (0, _appDefault.default)().el);
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _coreFile = require("./core/coreFile");
+var _theHeader = require("./components/TheHeader");
+var _theHeaderDefault = parcelHelpers.interopDefault(_theHeader);
+var _theFooter = require("./components/TheFooter");
+var _theFooterDefault = parcelHelpers.interopDefault(_theFooter);
 class App extends (0, _coreFile.Component) {
     render() {
+        const theHeader = new (0, _theHeaderDefault.default)().el;
         const routerView = document.createElement("router-view");
-        this.el.append(routerView);
+        const theFooter = new (0, _theFooterDefault.default)().el;
+        this.el.append(theHeader, routerView, theFooter);
     }
 }
 exports.default = App;
 
-},{"./core/coreFile":"eEvaP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"eEvaP":[function(require,module,exports) {
+},{"./core/coreFile":"eEvaP","./components/TheHeader":"3Cyq4","./components/TheFooter":"b3x3c","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"eEvaP":[function(require,module,exports) {
 ///// Component /////
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
@@ -708,24 +714,136 @@ exports.export = function(dest, destName, get) {
     });
 };
 
-},{}],"lY5uy":[function(require,module,exports) {
+},{}],"3Cyq4":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _coreFile = require("../core/coreFile");
+class TheHeader extends (0, _coreFile.Component) {
+    constructor(){
+        super({
+            tagName: "header",
+            state: {
+                menus: [
+                    {
+                        name: "Search",
+                        href: "#/"
+                    },
+                    {
+                        name: "Movie",
+                        href: "#/movie?id=tt4520988"
+                    },
+                    {
+                        name: "About",
+                        href: "#/about"
+                    }
+                ]
+            }
+        });
+        window.addEventListener("popstate", ()=>{
+            this.render();
+        });
+    }
+    render() {
+        this.el.innerHTML = /*html */ `
+    <a href="#/" class="logo"><span>OMDBAPI</span>.COM</a>
+    <nav>
+      <ul>
+        ${this.state.menus.map((menu)=>{
+            const href = menu.href.split("?")[0];
+            const hash = location.hash.split("?")[0];
+            const isActive = href === hash;
+            return /*html */ `
+          <li>
+            <a href="${menu.href}" class="${isActive ? "active" : null}">${menu.name}</a>
+          </li>
+          `;
+        }).join("")}
+      </ul>
+    </nav>
+    <a href="#/about" class="user">
+      <img src="https://avatars.githubusercontent.com/u/105327508?v=4" alt="User"/>
+    </a>
+    `;
+    }
+}
+exports.default = TheHeader;
+
+},{"../core/coreFile":"eEvaP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"b3x3c":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _coreFile = require("../core/coreFile");
+var _about = require("../store/about");
+var _aboutDefault = parcelHelpers.interopDefault(_about);
+class TheFooter extends (0, _coreFile.Component) {
+    constructor(){
+        super({
+            tagName: "footer"
+        });
+    }
+    render() {
+        const { github, repository } = (0, _aboutDefault.default).state;
+        this.el.innerHTML = /*html */ `
+    <div>
+      <a href="${repository}" target="_blank">
+        Github Repository
+      </a>
+    </div>
+    <div>
+      <a href="${github}" target="_blank">
+        ${new Date().getFullYear()}
+        EUNSOLY
+      </a>
+    </div>
+    `;
+    }
+}
+exports.default = TheFooter;
+
+},{"../core/coreFile":"eEvaP","../store/about":"4RAJO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"4RAJO":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _coreFile = require("../core/coreFile");
+exports.default = new (0, _coreFile.Store)({
+    photo: "https://avatars.githubusercontent.com/u/105327508?v=4",
+    name: "EUNSOLY / LeeEunSol",
+    email: "dmsthf9596@gamil.com",
+    blog: "https://eunsoly.tistory.com/",
+    github: "https://github.com/EUNSOLY",
+    repository: "https://github.com/EUNSOLY/vanillajs-movie-app"
+});
+
+},{"../core/coreFile":"eEvaP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lY5uy":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _coreFile = require("../core/coreFile");
 var _home = require("./Home");
 var _homeDefault = parcelHelpers.interopDefault(_home);
+var _movie = require("./Movie");
+var _movieDefault = parcelHelpers.interopDefault(_movie);
+var _about = require("./About");
+var _aboutDefault = parcelHelpers.interopDefault(_about);
+var _notFound = require("./NotFound");
+var _notFoundDefault = parcelHelpers.interopDefault(_notFound);
 exports.default = (0, _coreFile.createRouter)([
     {
         path: "#/",
         component: (0, _homeDefault.default)
     },
     {
-        path: "#/",
-        component: (0, _homeDefault.default)
+        path: "#/movie",
+        component: (0, _movieDefault.default)
+    },
+    {
+        path: "#/about",
+        component: (0, _aboutDefault.default)
+    },
+    {
+        path: ".*",
+        component: (0, _notFoundDefault.default)
     }
 ]);
 
-},{"../core/coreFile":"eEvaP","./Home":"lteSB","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lteSB":[function(require,module,exports) {
+},{"../core/coreFile":"eEvaP","./Home":"lteSB","./Movie":"bMSJw","./About":"7JIeg","./NotFound":"hv1OP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"lteSB":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _coreFile = require("../core/coreFile");
@@ -735,18 +853,21 @@ var _search = require("../components/Search");
 var _searchDefault = parcelHelpers.interopDefault(_search);
 var _movieList = require("../components/MovieList");
 var _movieListDefault = parcelHelpers.interopDefault(_movieList);
+var _movieListMore = require("../components/MovieListMore");
+var _movieListMoreDefault = parcelHelpers.interopDefault(_movieListMore);
 class Home extends (0, _coreFile.Component) {
     render() {
         const headline = new (0, _headlineDefault.default)().el;
         const search = new (0, _searchDefault.default)().el;
         const movieList = new (0, _movieListDefault.default)().el;
+        const moviListMore = new (0, _movieListMoreDefault.default)().el;
         this.el.classList.add("container");
-        this.el.append(headline, search, movieList);
+        this.el.append(headline, search, movieList, moviListMore);
     }
 }
 exports.default = Home;
 
-},{"../core/coreFile":"eEvaP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../components/Headline":"gaVgo","../components/Search":"jqPPz","../components/MovieList":"8UDl3"}],"gaVgo":[function(require,module,exports) {
+},{"../core/coreFile":"eEvaP","../components/Headline":"gaVgo","../components/Search":"jqPPz","../components/MovieList":"8UDl3","../components/MovieListMore":"3ZUar","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"gaVgo":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 var _coreFile = require("../core/coreFile");
@@ -779,9 +900,9 @@ class Search extends (0, _coreFile.Component) {
     render() {
         this.el.classList.add("search");
         this.el.innerHTML = /*html */ `
-    <input placeholder="Enter the movie title to search!"/>
+    <input value="${(0, _movieDefault.default).state.searchText}" placeholder="Enter the movie title to search!"/>
     <button class="btn btn-primary">
-      Search!
+      검색
     </button>
     `;
         const inputEl = this.el.querySelector("input");
@@ -800,28 +921,66 @@ class Search extends (0, _coreFile.Component) {
 }
 exports.default = Search;
 
-},{"../core/coreFile":"eEvaP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3","../store/movie":"kq1bo"}],"kq1bo":[function(require,module,exports) {
+},{"../core/coreFile":"eEvaP","../store/movie":"kq1bo","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"kq1bo":[function(require,module,exports) {
 var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
 parcelHelpers.defineInteropFlag(exports);
 parcelHelpers.export(exports, "searchMovies", ()=>searchMovies);
+parcelHelpers.export(exports, "getMovieDetails", ()=>getMovieDetails);
 var _coreFile = require("../core/coreFile");
 const store = new (0, _coreFile.Store)({
     searchText: "",
     page: 1,
-    movies: []
+    pageMax: 1,
+    movies: [],
+    movie: {},
+    loading: false,
+    message: "영화 제목을 검색해주세요!"
 });
 exports.default = store;
 const searchMovies = async (page)=>{
+    store.state.loading = true;
+    store.state.page = page;
     if (page === 1) {
-        store.state.page = 1;
         store.state.movies = [];
+        store.state.message = "";
     }
-    const result = await fetch(`https://omdbapi.com?apikey=7035c60c&s=${store.state.searchText}&page=${page}`);
-    const { Search } = await result.json();
-    store.state.movies = [
-        ...store.state.movies,
-        ...Search
-    ];
+    try {
+        const result = await fetch("/api/movie", {
+            method: "POST",
+            body: JSON.stringify({
+                title: store.state.searchText,
+                page: page
+            })
+        });
+        const { Search, totalResults, Response, Error } = await result.json();
+        if (Response === "True") {
+            store.state.movies = [
+                ...store.state.movies,
+                ...Search
+            ];
+            store.state.pageMax = Math.ceil(Number(totalResults) / 10);
+        } else {
+            store.state.message = Error;
+            store.state.pageMax = 1;
+        }
+    } catch (error) {
+        console.log("SearchMovies error : ", error);
+    } finally{
+        store.state.loading = false;
+    }
+};
+const getMovieDetails = async (id)=>{
+    try {
+        const res = await fetch("/api/movie", {
+            method: "POST",
+            body: JSON.stringify({
+                id: id
+            })
+        });
+        store.state.movie = await res.json();
+    } catch (error) {
+        console.log("getMovieDetailError : ", error);
+    }
 };
 
 },{"../core/coreFile":"eEvaP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"8UDl3":[function(require,module,exports) {
@@ -830,26 +989,205 @@ parcelHelpers.defineInteropFlag(exports);
 var _coreFile = require("../core/coreFile");
 var _movie = require("../store/movie");
 var _movieDefault = parcelHelpers.interopDefault(_movie);
+var _movieItem = require("./MovieItem");
+var _movieItemDefault = parcelHelpers.interopDefault(_movieItem);
 class MovieList extends (0, _coreFile.Component) {
     constructor(){
         super();
         (0, _movieDefault.default).subscribe("movies", ()=>{
             this.render();
         });
+        (0, _movieDefault.default).subscribe("loading", ()=>{
+            this.render();
+        });
+        (0, _movieDefault.default).subscribe("message", ()=>{
+            this.render();
+        });
     }
     render() {
         this.el.classList.add("movie-list");
         this.el.innerHTML = /*html */ `
-    <div class="movies"></div>
-    `;
+    ${(0, _movieDefault.default).state.message ? `<div class="message">${(0, _movieDefault.default).state.message}</div>` : `<div class="movies"></div>`}
+    <div class="the-loader hide"></div>`;
         const moviesEl = this.el.querySelector(".movies");
-        moviesEl.append((0, _movieDefault.default).state.movies.map((movie)=>{
-            return movie.Title;
-        }));
+        moviesEl?.append(...(0, _movieDefault.default).state.movies.map((movie)=>new (0, _movieItemDefault.default)({
+                movie
+            }).el));
+        const loaderEl = this.el.querySelector(".the-loader");
+        (0, _movieDefault.default).state.loading ? loaderEl.classList.remove("hide") : loaderEl.classList.add("hide");
     }
-}
+} // movieStore.state.movies.map((movie) => {
+ //   return new MovieItem({
+ //     // 속성과 데이터 값이 같으면 1개로 생략 가능 movie
+ //     movie: movie,
+ //   }).el;
+ // })
 exports.default = MovieList;
 
-},{"../core/coreFile":"eEvaP","../store/movie":"kq1bo","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["f3BSW","gLLPy"], "gLLPy", "parcelRequire9e6e")
+},{"../core/coreFile":"eEvaP","../store/movie":"kq1bo","./MovieItem":"fAzE8","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"fAzE8":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _coreFile = require("../core/coreFile");
+class MovieItem extends (0, _coreFile.Component) {
+    constructor(props){
+        super({
+            props,
+            tagName: "a"
+        });
+    }
+    render() {
+        const { movie } = this.props;
+        this.el.setAttribute("href", `#/movie?id=${movie.imdbID}`);
+        this.el.classList.add("movie");
+        this.el.style.backgroundImage = `url(${movie.Poster})`;
+        this.el.innerHTML = /*html */ `
+    <div class="info">
+      <div class="year">
+        ${movie.Year}
+      </div>
+      <div class="title">
+      ${movie.Title}
+      </div>
+
+    </div>
+    `;
+    }
+}
+exports.default = MovieItem;
+
+},{"../core/coreFile":"eEvaP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"3ZUar":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _coreFile = require("../core/coreFile");
+var _movie = require("../store/movie");
+var _movieDefault = parcelHelpers.interopDefault(_movie);
+class MovieListMore extends (0, _coreFile.Component) {
+    constructor(){
+        super({
+            tagName: "button"
+        });
+        (0, _movieDefault.default).subscribe("pageMax", ()=>{
+            const { page, pageMax } = (0, _movieDefault.default).state;
+            pageMax > page ? this.el.classList.remove("hide") : this.el.classList.add("hide");
+        });
+    }
+    render() {
+        this.el.classList.add("btn", "view-more", "hide");
+        this.el.textContent = "더보기";
+        this.el.addEventListener("click", async ()=>{
+            this.el.classList.add("hide");
+            await (0, _movie.searchMovies)((0, _movieDefault.default).state.page + 1);
+        });
+    }
+}
+exports.default = MovieListMore;
+
+},{"../core/coreFile":"eEvaP","../store/movie":"kq1bo","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"bMSJw":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _coreFile = require("../core/coreFile");
+var _movie = require("../store/movie");
+var _movieDefault = parcelHelpers.interopDefault(_movie);
+class Movie extends (0, _coreFile.Component) {
+    async render() {
+        this.el.classList.add("container", "the-movie");
+        this.el.innerHTML = /*html */ `
+    <div class="poster skeleton"></div>
+    <div class="specs">
+      <div class="title skeleton"></div>
+      <div class="labels skeleton"></div>
+      <div class="plot skeleton"></div>
+    </div>
+    `;
+        await (0, _movie.getMovieDetails)(history.state.id);
+        console.log((0, _movieDefault.default).state.movie);
+        const { movie } = (0, _movieDefault.default).state;
+        const bigPoster = movie.Poster.replace("SX300", "SX700");
+        this.el.innerHTML = /*html */ `
+    <div
+    style="background-image: url(${bigPoster})"
+    class="poster"></div>
+    <div class="specs">
+      <div class="title">
+      ${movie.Title}
+      </div>
+      <div class="labels">
+        <span>${movie.Released}</span>
+        &nbsp;/&nbsp;
+        <span>${movie.Runtime}</span>
+        &nbsp;/&nbsp;
+        <span>${movie.Country}</span>
+      </div>
+      <div class="plot">
+        ${movie.Plot}
+      </div>
+      <div>
+        <h3>Ratings</h3>
+        ${movie.Ratings.map((rating)=>{
+            return `<p>${rating.Source} - ${rating.Value}</p>`;
+        }).join("")}
+
+      </div>
+      <div>
+        <h3>Actors</h3>
+        <p>${movie.Actors}</p>
+      </div>
+      <div>
+        <h3>Director</h3>
+        <p>${movie.Director}</p>
+      </div>
+      <div>
+        <h3>Production</h3>
+        <p>${movie.Production}</p>
+      </div>
+      <div>
+        <h3>Genre</h3>
+        <p>${movie.Genre}</p>
+      </div>
+    </div>
+
+    `;
+    }
+}
+exports.default = Movie;
+
+},{"../core/coreFile":"eEvaP","../store/movie":"kq1bo","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"7JIeg":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _coreFile = require("../core/coreFile");
+var _about = require("../store/about");
+var _aboutDefault = parcelHelpers.interopDefault(_about);
+class About extends (0, _coreFile.Component) {
+    render() {
+        const { photo, name, email, blog, github, repository } = (0, _aboutDefault.default).state;
+        this.el.classList.add("container", "about");
+        this.el.innerHTML = /*html */ `
+    <div style="background-image:url(${photo})" class="photo"></div>
+    <p class="name">${name}</p>
+    <p><a href="https://mail.google.com/mail/?view=cm&fs=1&to=${email}"target="_blank">${email}</a></p>
+    <p><a href="${github}"target="_blank">Github</a></p>
+    <p><a href="${blog}"target="_blank">Blog</a></p>
+    `;
+    }
+}
+exports.default = About;
+
+},{"../core/coreFile":"eEvaP","../store/about":"4RAJO","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}],"hv1OP":[function(require,module,exports) {
+var parcelHelpers = require("@parcel/transformer-js/src/esmodule-helpers.js");
+parcelHelpers.defineInteropFlag(exports);
+var _coreFile = require("../core/coreFile");
+class NotFound extends (0, _coreFile.Component) {
+    render() {
+        this.el.classList.add("container", "not-found");
+        this.el.innerHTML = /*html */ `
+    <h1>
+      존재하지 않는 페이지 입니다!
+    </h1>
+    `;
+    }
+}
+exports.default = NotFound;
+
+},{"../core/coreFile":"eEvaP","@parcel/transformer-js/src/esmodule-helpers.js":"gkKU3"}]},["f3BSW","gLLPy"], "gLLPy", "parcelRequire9e6e")
 
 //# sourceMappingURL=index.4d6bcbeb.js.map
