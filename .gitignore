@@ -1,6 +1,12 @@
+# Custom
 .parcel-cache
-.cache
+.env
+
 node_modules
+dist
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
 .vscode
 .vercel
-.env
