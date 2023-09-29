@@ -13,7 +13,7 @@ export default class Movie extends Component {
     `;
 
     await getMovieDetails(history.state.id);
-    console.log(movieStore.state.movie);
+    console.log("Movie.ts의 movieStore : ", movieStore.state.movie);
     const { movie } = movieStore.state;
     const bigPoster = movie.Poster.replace("SX300", "SX700");
 

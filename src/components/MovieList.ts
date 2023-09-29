@@ -35,14 +35,7 @@ export default class MovieList extends Component {
     );
     const loaderEl = this.el.querySelector(".the-loader");
     movieStore.state.loading
-      ? loaderEl.classList.remove("hide")
-      : loaderEl.classList.add("hide");
+      ? loaderEl?.classList.remove("hide")
+      : loaderEl?.classList.add("hide");
   }
 }
-
-// movieStore.state.movies.map((movie) => {
-//   return new MovieItem({
-//     // 속성과 데이터 값이 같으면 1개로 생략 가능 movie
-//     movie: movie,
-//   }).el;
-// })
